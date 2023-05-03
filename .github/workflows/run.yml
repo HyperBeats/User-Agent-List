@@ -31,7 +31,7 @@ jobs:
   
     - name: Start
       run: | 
-        python main.py
+        python useragents.py
                 
     - name: Commit files
       run: |
