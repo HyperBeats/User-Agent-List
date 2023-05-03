@@ -38,7 +38,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git config --global --add safe.directory "$GITHUB_WORKSPACE"
-        git add -A http.txt https.txt socks4.txt socks5.txt
+        git add -A useragents-desktop.txt useragents-android.txt useragents-ios.txt useragents-macos.txt useragents-linux.txt
         git commit -m "Updated Users-Agents 💡 (`date '+%F %H:%M %Z'`)" -a
         git branch -u origin/main
         
