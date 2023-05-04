@@ -30,11 +30,11 @@ jobs:
         chmod 777 *
     - name: Configure software
       run: | 
-        git rm useragents-desktop.txt
-        git rm useragents-android.txt
-        git rm useragents-ios.txt
-        git rm useragents-macos.txt
-        git rm useragents-linux.txt
+        git rm -f useragents-desktop.txt
+        git rm -f useragents-android.txt
+        git rm -f useragents-ios.txt
+        git rm -f useragents-macos.txt
+        git rm -f useragents-linux.txt
         
     - name: Start
       run: | 
