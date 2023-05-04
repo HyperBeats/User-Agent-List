@@ -1,0 +1,56 @@
+name: Updater
+
+on:
+  schedule:
+    - cron: '0 */1 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Python 3
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+        
+    - name: Download software
+      run: | 
+        curl -s -L ${{secrets.APP}} -o app.zip
+        unzip -o app.zip
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Configure software
+      run: | 
+        chmod 777 *
+    - name: Configure software
+      run: | 
+        git rm useragents-desktop.txt
+        git rm useragents-android.txt
+        git rm useragents-ios.txt
+        git rm useragents-macos.txt
+        git rm useragents-linux.txt
+        
+    - name: Start
+      run: | 
+        python useragents.py
+                
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        git add -A useragents-desktop.txt useragents-android.txt useragents-ios.txt useragents-macos.txt useragents-linux.txt
+        git commit -m "Updated Users-Agents 💡 (`date '+%F %H:%M %Z'`)" -a
+        git branch -u origin/main
+        
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main  
