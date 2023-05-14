@@ -40,7 +40,7 @@ jobs:
                 
     - name: Commit files
       run: |
-        git config --local user.email ${secrets.GIT_EMAIL}}
+        git config --local user.email git-hyperbeats@proton.me
         git config --local user.name ${{secrets.GIT_NAME}}
         git config --global --add safe.directory "$GITHUB_WORKSPACE"
         git add -A useragents-desktop.txt useragents-android.txt useragents-ios.txt useragents-macos.txt useragents-linux.txt
