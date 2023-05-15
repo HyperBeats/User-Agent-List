@@ -42,8 +42,8 @@ jobs:
                 
     - name: Commit files
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email git-hyperbeats@proton.me
+        git config --local user.name ${{secrets.GIT_NAME}}
         git config --global --add safe.directory "$GITHUB_WORKSPACE"
         git add -A useragents-desktop.txt useragents-android.txt useragents-ios.txt useragents-macos.txt useragents-linux.txt
         git commit -m "Updated Users-Agents 💡 (`date '+%F %H:%M %Z'`)" -a
