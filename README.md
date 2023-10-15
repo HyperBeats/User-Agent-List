@@ -13,13 +13,6 @@
 A list of User-Agent that is updated every hours.
 </p>
 
-<p align="center">
-Get $200 in credits for 60 days.
-</p>
-<p align="center"> 
-  <a href="https://www.digitalocean.com/?refcode=c3836b751d7f&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%203.svg" alt="DigitalOcean Referral Badge" /></a>
-</p>
-
 # <p align="center">Download</p>
 <center>
 
