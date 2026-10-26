@@ -1,3 +1,4 @@
+
 name: Updater
 
 on:
@@ -5,52 +6,53 @@ on:
     - cron: '0 */6 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install Python 3
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-        
-    - name: Download software
-      run: | 
-        curl -s -L ${{secrets.APP}} -o app.zip
-        unzip -o app.zip
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
 
-    - name: Configure software
-      run: | 
-        chmod 777 *
-    - name: Configure software
-      run: | 
-        git rm -f useragents-desktop.txt
-        git rm -f useragents-android.txt
-        git rm -f useragents-ios.txt
-        git rm -f useragents-macos.txt
-        git rm -f useragents-linux.txt
-        
-    - name: Start
-      run: | 
-        python useragents.py
-                
-    - name: Commit files
-      run: |
-        git config --local user.email git-hyperbeats@proton.me
-        git config --local user.name ${{secrets.GIT_NAME}}
-        git config --global --add safe.directory "$GITHUB_WORKSPACE"
-        git add -A useragents-desktop.txt useragents-android.txt useragents-ios.txt useragents-macos.txt useragents-linux.txt
-        git commit -m "Updated Users-Agents 💡 (`date '+%F %H:%M %Z'`)" -a
-        git branch -u origin/main
-        
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Download software
+        env:
+          APP_URL: ${{ secrets.APP }}
+        run: |
+          curl -fsSL "$APP_URL" -o app.zip
+          unzip -o app.zip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Start updater
+        run: |
+          python useragents.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.email "git-hyperbeats@proton.me"
+          git config user.name "${{ secrets.GIT_NAME }}"
+
+          git add -A -- \
+            useragents-desktop.txt \
+            useragents-android.txt \
+            useragents-ios.txt \
+            useragents-macos.txt \
+            useragents-linux.txt
+
+          if git diff --cached --quiet; then
+            echo "Aucun changement détecté."
+          else
+            git commit -m "Updated Users-Agents 💡 ($(date '+%F %H:%M %Z'))"
+            git push origin HEAD:main
+          fi
